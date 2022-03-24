@@ -1,0 +1,34 @@
+
+
+.main {
+    background-color:#f7e39c;
+    font: #da8067;
+    width:33%;
+    height:auto;
+    border-width: 1px;
+    border-style: solid;
+    border-color: purple;
+    margin:auto;
+}
+
+.header {
+    background-color: #da8067;
+    
+    height:10%;
+}
+
+.cardBody {
+    background-color: #f7ffba;
+    
+    height:80%;
+}
+
+.cardFooter {
+    height:10%;
+    background-color: #ebaf81;
+    
+    font-size: 0.75rem;
+}
+.post{
+    background-color: #ebaf81;
+}
