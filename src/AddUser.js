@@ -17,7 +17,7 @@ function AddUser(props) {
 
     const submitHandler = (e) => {
         // console.log("form submitted.");
-        e.preventDefault();        
+        e.preventDefault();              
         props.updateList(state.username, state.description, state.like);
         toastr.success("Your post was added!", "Success");
         changeState({

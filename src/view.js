@@ -7,6 +7,7 @@ import Heart from "react-animated-heart";
 // component import
 import './App.css';
 import './card.css';
+import {FaHeart} from "react-icons/fa";
 
 function View(props){
     // const todos = [{ id: 1, task: "make static data", complete: false },
@@ -28,21 +29,17 @@ function View(props){
   //   )
   //   )
   // }
- const state ={
-    count :0
-  }
-
-  const incrementMe = () => {
-    let newCount = this.state.count + 1
-    this.setState({
-      count: newCount
-    })
-  }
+  const [count, setCount] = useState(0);
   const [isClick, setClick] = useState(false);
   
+  const handleLikes = (index) => {
+    props.updateLikes(index);
+  }
+
   const buildCards = () => {
-    props.socmedpost.forEach((e) => console.log(e.username + " " + e.description + " " + e.like));
-    return props.socmedpost.map((current) => (
+    console.log(props);
+    //props.socmedpost.forEach((e) => console.log(e.username + " " + e.description + " " + e.like));
+    return props.socmedpost.map((current, index) => (
       <div className="container cardMain">
           <Card>
             <Card.Header className="cardHeader">{current.username}</Card.Header>
@@ -52,10 +49,13 @@ function View(props){
                   {' '}
                   {current.description}{' '}
                 </p>
-                <Heart isClick={isClick} onClick={() => setClick(!isClick)}/>
+                {/* <Heart isClick={isClick} onClick={() => { setClick(!isClick); setCount(count + 1); } }/> */}
                 <footer className="cardFooter blockquote-footer">
                   Post was liked by {current.like} user(s).  
-                  <button onClick ={this.incrementMe}><faheart/>likes:{this.state.count} </button>                 
+                  <p>You liked {count} times</p>
+      <button onClick={() => handleLikes(index)}>
+        < FaHeart/>
+      </button>                 
                 </footer>                
               </blockquote>
             </Card.Body>

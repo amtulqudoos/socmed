@@ -35,12 +35,25 @@ function App() {
     changeSocMedPost((prevState) => [...prevState, listItem]);
   }
 
+  const updateLikes = (likeIndex) => {
+    console.log(socmedpost);
+    const newState = socmedpost.map((current, index) => { 
+      if(index === likeIndex) { 
+        return {username: current.username , description: current.description, like: current.like += 1}
+      } else {
+        return {username: current.username , description: current.description, like: current.like }
+      }
+    });
+    console.log(newState);
+    changeSocMedPost(newState);
+  }
+
   useEffect(() => {
     const listContents = localStorage.getItem("list");
-    changeSocMedPost(JSON.parse(listContents)||[])
+    changeSocMedPost(JSON.parse(listContents)||[]);
   }, []);
 
-  return (
+  return (    
     <div>
         <Navbar bg="light" expand="md">
           <Container>
@@ -59,7 +72,7 @@ function App() {
         <Container>
           <Routes>
             <Route index element={
-              <View socmedpost = {socmedpost}/>
+              <View socmedpost = {socmedpost} updateLikes={(index) => updateLikes(index)} />
             }/> 
             <Route path="/Add" element={
               <Add updateList={
@@ -74,11 +87,9 @@ function App() {
                 }/>
             }/>
             <Route path="/view" element={
-              <View socmedpost = {socmedpost}/>
-            }/>
-            
-            
-          </Routes>          
+              <View socmedpost={socmedpost} updateLikes={(index) => updateLikes(index)}/>
+            }/>                      
+          </Routes>  
         </Container>
       </div>
   );

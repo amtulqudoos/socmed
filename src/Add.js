@@ -14,14 +14,21 @@ function Add(props) {
 
     const submitHandler = (e) => {
         // console.log("form submitted.");
-        e.preventDefault();        
-        props.updateList(state.username, state.description, state.like);
-        toastr.success("Your post was added!", "Success");
-        changeState({
-            username: "",
-            description: "",
-            like: 0
-        });
+        e.preventDefault();  
+        let errorText = [];
+        if (state.username === null||state.username === "") { errorText.push("Username"); }
+        if (state.description === null||state.description === "") { errorText.push("Description"); }
+        if (errorText.length>0) { 
+            toastr.error(errorText.join(" and ") + " is missing", "Error"); 
+        } else {        
+            props.updateList(state.username, state.description, state.like);
+            toastr.success("Your post was added!", "Success");
+            changeState({
+                username: "",
+                description: "",
+                like: 0
+            });
+        }
     }    
 
     toastr.options = {
