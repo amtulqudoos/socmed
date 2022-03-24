@@ -1,9 +1,12 @@
-import React from 'react';
+import React,{useState} from 'react';
 // import Table from 'react-bootstrap/Table';
 // import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
+// icons import
+import Heart from "react-animated-heart";
+// component import
 import './App.css';
-import './card.scss';
+import './card.css';
 
 function View(props){
     // const todos = [{ id: 1, task: "make static data", complete: false },
@@ -25,8 +28,20 @@ function View(props){
   //   )
   //   )
   // }
+ const state ={
+    count :0
+  }
 
+  const incrementMe = () => {
+    let newCount = this.state.count + 1
+    this.setState({
+      count: newCount
+    })
+  }
+  const [isClick, setClick] = useState(false);
+  
   const buildCards = () => {
+    props.socmedpost.forEach((e) => console.log(e.username + " " + e.description + " " + e.like));
     return props.socmedpost.map((current) => (
       <div className="container cardMain">
           <Card>
@@ -37,9 +52,11 @@ function View(props){
                   {' '}
                   {current.description}{' '}
                 </p>
+                <Heart isClick={isClick} onClick={() => setClick(!isClick)}/>
                 <footer className="cardFooter blockquote-footer">
-                  Post was liked by {current.like} user(s).
-                </footer>
+                  Post was liked by {current.like} user(s).  
+                  <button onClick ={this.incrementMe}><faheart/>likes:{this.state.count} </button>                 
+                </footer>                
               </blockquote>
             </Card.Body>
           </Card>    

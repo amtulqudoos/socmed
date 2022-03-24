@@ -9,8 +9,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-
+// icons import
+import { FaHome, FaPenNib, FaBell, FaUser } from "react-icons/fa";
+// import components
 import Add from './Add';
+import AddUser from './AddUser';
 import View from './view';
 
 function App() {
@@ -18,6 +21,11 @@ function App() {
   const [socmedpost, changeSocMedPost] = useState([
     { username: "default", description: "Today the weather has been fantastic, it's been 18 degrees centigrade.", like: 1},
     { username: "default", description: "This is just another test post to show that it is working", like: 1}    
+  ]);
+
+  const [userdetails, changeUserDetails] = useState([
+    { username: "keiron", fullname: "keiron goodwin", image: false},
+    { username: "amatul", fullname: "amatul qudoos", image: false}
   ]);
 
   const updateList = (username, description, like) => {
@@ -36,13 +44,14 @@ function App() {
     <div>
         <Navbar bg="light" expand="md">
           <Container>
-            <Navbar.Brand href="#home">ToDo List</Navbar.Brand>
+            <Navbar.Brand href="#home">SocMed</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
-                <Link className="nav-link" to="/" >Home</Link>
-                <Link className="nav-link" to="/view" >View todo list</Link>
-                <Link className="nav-link" to="/Add">Add an item</Link>                
+                <Link className="nav-link" to="/" ><FaHome/></Link>
+                <Link className="nav-link" to="/view" ><FaBell/></Link>
+                <Link className="nav-link" to="/Add"><FaPenNib/></Link>
+                <Link className="nav-link" to="/AddUser"><FaUser/></Link>
               </Nav>
             </Navbar.Collapse>
           </Container>
@@ -54,6 +63,12 @@ function App() {
             }/> 
             <Route path="/Add" element={
               <Add updateList={
+                (username, description, like) => 
+                updateList(username, description, like)
+                }/>
+            }/>
+            <Route path="/AddUser" element={
+              <AddUser updateList={
                 (username, description, like) => 
                 updateList(username, description, like)
                 }/>

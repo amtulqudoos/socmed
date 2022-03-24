@@ -80,7 +80,7 @@ function Add(props) {
                       onChange={(e) => handleChange(e)}/>
                 </Form.Group>
                 <Form.Group controlId="like">
-                    <Form.Label>Complete</Form.Label>
+                    <Form.Label>Likes</Form.Label>
                      <Form.Control name="like"
                       type="number"                       
                       checked={state.like}
