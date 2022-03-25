@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useReducer, useState} from 'react';
 // import Table from 'react-bootstrap/Table';
 // import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
@@ -8,27 +8,11 @@ import Heart from "react-animated-heart";
 import './App.css';
 import './card.css';
 import {FaHeart} from "react-icons/fa";
+import manimage from './images/man.png';
+import womanimage from './images/woman.png';
 
 function View(props){
-    // const todos = [{ id: 1, task: "make static data", complete: false },
-    // { id: 2, task: "make dynamic data", complete: false }]
 
-  // const buildRows = () =>  {
-  //   return props.socmedpost.map((current) => (
-  //     <tr key={current.username}>
-  //       <td>
-  //         {current.username}
-  //       </td>
-  //       <td>
-  //         {current.description}
-  //       </td>
-  //       <td>
-  //         {current.like}          
-  //       </td>
-  //     </tr>
-  //   )
-  //   )
-  // }
   const [count, setCount] = useState(0);
   const [isClick, setClick] = useState(false);
   
@@ -36,13 +20,64 @@ function View(props){
     props.updateLikes(index);
   }
 
-  const buildCards = () => {
-    console.log(props);
-    //props.socmedpost.forEach((e) => console.log(e.username + " " + e.description + " " + e.like));
+  const userImage = (findusername) => {
+
+    if (findusername === null || findusername === "" || findusername === "default") { 
+      return manimage; 
+    }
+
+    const user = props.userdetails.find((e) => e.username === findusername);
+    //console.log("AAA:" + findusername);
+
+    if (findusername === null || findusername === "" || findusername === "default" || user === undefined) { 
+      return manimage; 
+    }
+
+//console.log(user.image);
+
+    if (user === null|| user === "") {
+      console.log("A");
+      return manimage;
+    } else {
+      console.log("B" + user.image);
+      switch (user.image)
+      {
+        case "1":
+          console.log("man");
+          return manimage;
+          break;
+        case "2":
+          console.log("woman");
+          return womanimage;
+          break;
+        default:
+          console.log("default to man");
+          return manimage;
+          break;
+      }
+    }  
+  }
+
+  const userFullName = (findusername) => {
+
+    const user = props.userdetails.find((e) => e.username === findusername);
+
+    if (findusername === "" || findusername === null || findusername === "default" || user === undefined) {
+      return "Anonymous User (" + findusername + ")";
+    }
+    
+    return user.fullname;    
+
+  }
+
+  const buildCards = () => {        
+
     return props.socmedpost.map((current, index) => (
-      <div className="container cardMain">
+      <>
+      <br/>
+      <div className="container cardMain">        
           <Card>
-            <Card.Header className="cardHeader">{current.username}</Card.Header>
+            <Card.Header className="cardHeader"><img src={userImage(current.username)} alt="avatar image for user"></img>{userFullName(current.username)}</Card.Header>
             <Card.Body className="cardBody">
               <blockquote className="blockquote mb-0">
                 <p>
@@ -51,16 +86,17 @@ function View(props){
                 </p>
                 {/* <Heart isClick={isClick} onClick={() => { setClick(!isClick); setCount(count + 1); } }/> */}
                 <footer className="cardFooter blockquote-footer">
-                  Post was liked by {current.like} user(s).  
-                  <p>You liked {count} times</p>
-      <button onClick={() => handleLikes(index)}>
-        < FaHeart/>
-      </button>                 
+                  Post was liked by {current.like} user(s). 
+                  <br/>                   
+                  <button onClick={() => handleLikes(index)}>
+                    < FaHeart style={{color: 'red'}}/>
+                  </button>                 
                 </footer>                
               </blockquote>
             </Card.Body>
           </Card>    
         </div>
+        </>
     ))
   }
 

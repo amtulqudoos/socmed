@@ -1,9 +1,14 @@
 import React, {useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+//import InputGroup from 'react-bootstrap/InputGroup';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
-import saveAs from 'file-saver';
+import manimage from './images/manbig.png';
+import womanimage from './images/womanbig.png';
+//import saveAs from 'file-saver';
 
 function AddUser(props) {
 
@@ -11,32 +16,28 @@ function AddUser(props) {
 
     const[state, changeState] = useState({
         username: "",
-        description: "",
-        like: 0
+        fullname: "",
+        image: 0
     });
 
     const submitHandler = (e) => {
-        // console.log("form submitted.");
         e.preventDefault();              
-        props.updateList(state.username, state.description, state.like);
-        toastr.success("Your post was added!", "Success");
-        changeState({
-            username: "",
-            description: "",
-            like: 0
-        });
-        //let url = URL.createObjectURL(selectedImage);        
-        //let file = fetch(url).then(r => r.blob()).then(blobFile => new File([blobFile], "./images/" + state.username + ".jpg", { type: "image/jpg" }));
-        //saveAs(file);
-        let imageObj = document.getElementById("imageToSave");
-        let canvasObj = document.getElementById("canvasToSave");
-        let ctx = canvasObj.getContext('2d');
-        canvasObj.height = imageObj.height;
-        canvasObj.width = imageObj.width;
-        ctx.drawImage(imageObj, 0, 0);
-        canvasObj.toBlob((e) => {
-            saveAs(e, "./images/" + state.username + ".jpg");
-        });
+        let errorArray = [];
+        if (state.username === null||state.username === "") { errorArray.push("Username"); }
+        if (state.fullname === null||state.fullname === "") { errorArray.push("Fullname"); }
+        if (errorArray.length > 0) {
+            toastr.error(errorArray.join(" and ") + " input(s) are missing information.", "Error");
+        } else {
+            //console.log(state.image);
+            props.updateUser(state.username, state.fullname, state.image);
+            toastr.success("Your user was added!", "Success");
+            changeState({
+                username: "",
+                fullname: "",
+                image: 0
+            });    
+        }
+        console.log(state);
     }    
 
     toastr.options = {
@@ -57,10 +58,10 @@ function AddUser(props) {
       "hideMethod": "fadeOut"
     }
 
-    const handleChange = (event) => {
+    const handleChange = (event) => {        
 
         const newState = {...state};        
-     
+                        
         switch (event.target.type)
         {
             case "checkbox":
@@ -68,17 +69,22 @@ function AddUser(props) {
                 break;
             case "number":
                 newState[event.target.name] = Number(event.target.value);
-                break;
+                break;            
             default:
-                newState[event.target.name] = event.target.value;    
+                if (event.target.type != "text") {
+                    newState["image"] = event.target.attributes[1].nodeValue;                
+                    console.log("jjj");
+                } else {
+                    newState[event.target.name] = event.target.value;    
+                }
                 break;
         }
-        
+    
         changeState(newState);        
     }
     return(
     <>
-        <div className="container">
+        <div className="container cardBody">
             <Form onSubmit={(e) => submitHandler(e) }>
                 <Form.Group controlId="username">
                     <Form.Label>UserName</Form.Label>
@@ -94,29 +100,13 @@ function AddUser(props) {
                       type="text" 
                       value={state.fullname} 
                       onChange={(e) => handleChange(e)}/>
-                </Form.Group>            
-                <br/>
-                <div>                
-                {selectedImage && (
-                    <div>
-                    <img id="imageToSave" alt="not fount" width={"250px"} src={URL.createObjectURL(selectedImage)} />
-                    <canvas id="canvasToSave" height="64" width="64"></canvas>
-                    <br />
-                    <button onClick={()=>setSelectedImage(null)}>Remove</button>                    
-                    </div>
-                )}
-                <br/>
-                <br/> 
-                <input
-                    type="file"
-                    name="myImage"
-                    onChange={(event) => {
-                    console.log(event.target.files[0]);
-                    setSelectedImage(event.target.files[0]);
-                    }}
-                />
-            </div>
-                <Button variant="primary" type="submit">Submit</Button>
+                </Form.Group>          
+                <ButtonGroup name="image" id="image" controlId="image" onClick={(e) => handleChange(e)}>
+                    <Button variant="primary" value="1"><img src={manimage} ariaDescription="1"></img></Button>
+                    <Button variant="danger" value="2"><img src={womanimage} ariaDescription="2"></img></Button>                    
+                </ButtonGroup>
+                <br></br>
+                <Button variant="success" type="submit">Submit</Button>
             </Form>
         </div>
     </>

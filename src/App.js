@@ -28,15 +28,19 @@ function App() {
     { username: "amatul", fullname: "amatul qudoos", image: false}
   ]);
 
-  const updateList = (username, description, like) => {
-    // console.log("whoopie doo");
+  const updateList = (username, description, like) => {    
     const listItem = {username, description, like};
     localStorage.setItem("list", JSON.stringify([...socmedpost, listItem]));
     changeSocMedPost((prevState) => [...prevState, listItem]);
   }
 
+  const updateUser = (username, fullname, image) => {
+    const userItem = {username, fullname, image};
+    localStorage.setItem("users", JSON.stringify([...userdetails, userItem]));
+    changeUserDetails((prevState) => [...prevState, userItem]);
+  }
+
   const updateLikes = (likeIndex) => {
-    console.log(socmedpost);
     const newState = socmedpost.map((current, index) => { 
       if(index === likeIndex) { 
         return {username: current.username , description: current.description, like: current.like += 1}
@@ -44,18 +48,20 @@ function App() {
         return {username: current.username , description: current.description, like: current.like }
       }
     });
-    console.log(newState);
     changeSocMedPost(newState);
+    localStorage.setItem("list", JSON.stringify(newState));
   }
 
   useEffect(() => {
     const listContents = localStorage.getItem("list");
     changeSocMedPost(JSON.parse(listContents)||[]);
+    const userContents = localStorage.getItem("users");
+    changeUserDetails(JSON.parse(userContents)||[]);
   }, []);
 
   return (    
     <div>
-        <Navbar bg="light" expand="md">
+        <Navbar bg="success" expand="md">
           <Container>
             <Navbar.Brand href="#home">SocMed</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -72,7 +78,7 @@ function App() {
         <Container>
           <Routes>
             <Route index element={
-              <View socmedpost = {socmedpost} updateLikes={(index) => updateLikes(index)} />
+              <View socmedpost = {socmedpost} userdetails={userdetails} updateLikes={(index) => updateLikes(index)} />
             }/> 
             <Route path="/Add" element={
               <Add updateList={
@@ -81,13 +87,13 @@ function App() {
                 }/>
             }/>
             <Route path="/AddUser" element={
-              <AddUser updateList={
-                (username, description, like) => 
-                updateList(username, description, like)
+              <AddUser updateUser={
+                (username, fullname, image) => 
+                updateUser(username, fullname, image)
                 }/>
             }/>
             <Route path="/view" element={
-              <View socmedpost={socmedpost} updateLikes={(index) => updateLikes(index)}/>
+              <View socmedpost={socmedpost} userdetails={userdetails} updateLikes={(index) => updateLikes(index)}/>
             }/>                      
           </Routes>  
         </Container>

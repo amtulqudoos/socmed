@@ -69,7 +69,7 @@ function Add(props) {
         changeState(newState);        
     }
     return(
-        <div className="container">
+        <div className="container cardBody">
             <Form onSubmit={(e) => submitHandler(e) }>
                 <Form.Group controlId="username">
                     <Form.Label>UserName</Form.Label>
@@ -94,7 +94,7 @@ function Add(props) {
                       onChange={(e) => handleChange(e)}/>
                 </Form.Group>
 
-                <Button variant="primary" type="submit">Submit</Button>
+                <Button variant="success" type="submit">Submit</Button>
             </Form>
         </div>
     )
